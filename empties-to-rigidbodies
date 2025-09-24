@@ -2,7 +2,7 @@
 bl_info = {
     "name": "OptiTrack: Rigidbody Tools",
     "author": "Oisin OSullivan",
-    "version": (1, 0, 1), # Added full pipeline operator + panel
+    "version": (1, 0, 2), # Fixed full pipeline operator
     "blender": (4, 5, 0),
     "location": "3D View > Sidebar (N) > OptiTrack",
     "description": "A tool to import, create, bake, and export rigs from animated OptiTrack empties. Heavily expanded version of Artell's *Empties to Bones* script. Now includes a one-click pipeline.",
@@ -421,6 +421,7 @@ class OBJECT_OT_export_all_rigs_for_unreal(bpy.types.Operator, ImportHelper):
                 bake_anim_use_all_actions=False,
                 bake_anim_force_startend_keying=True,
                 bake_anim_simplify_factor=0.0,
+                
                 object_types={'ARMATURE', 'MESH'},
                 axis_forward='-X',
                 axis_up='Z',
@@ -492,6 +493,7 @@ class OBJECT_OT_export_selected_rigs_for_unreal(bpy.types.Operator, ImportHelper
             bpy.ops.export_scene.fbx(
                 filepath=filepath,
                 use_selection=True,
+                
                 add_leaf_bones=False,
                 bake_anim=True,
                 bake_anim_use_nla_strips=False,
@@ -517,6 +519,7 @@ class OBJECT_OT_export_selected_rigs_for_unreal(bpy.types.Operator, ImportHelper
             blend_name = bpy.path.display_name_from_filepath(context.blend_data.filepath)
             context.scene.optitrack_export_folder_name = f"{blend_name}_Export"
         
+        
         context.window_manager.fileselect_add(self)
         return {'RUNNING_MODAL'}
 
@@ -537,6 +540,9 @@ class OBJECT_OT_run_full_pipeline(bpy.types.Operator, ImportHelper):
         cleanup_mode = getattr(scene, 'optitrack_cleanup_empties', 'HIDE')
         folder_name = getattr(scene, 'optitrack_export_folder_name', "Exported_Rigidbody_Armatures")
 
+        # --- FIX: Capture objects before import to identify new ones ---
+        objects_before = set(context.scene.objects)
+        
         # 1) Import FBX
         try:
             bpy.ops.import_scene.fbx(
@@ -548,9 +554,69 @@ class OBJECT_OT_run_full_pipeline(bpy.types.Operator, ImportHelper):
         except Exception as e:
             self.report({'ERROR'}, f"Import failed: {e}")
             return {'CANCELLED'}
+            
+        # --- FIX: Identify newly imported objects ---
+        objects_after = set(context.scene.objects)
+        new_objects = list(objects_after - objects_before)
+        if not new_objects:
+            self.report({'WARNING'}, "FBX file was empty or importer failed.")
+            return {'CANCELLED'}
+            
+        # --- FIX: Set up scene collections just like the manual import operator ---
+        base_name = bpy.path.display_name_from_filepath(self.filepath)
+        main_coll = bpy.data.collections.new(base_name)
+        context.scene.collection.children.link(main_coll)
+        skel_coll = bpy.data.collections.new("Skeleton")
+        main_coll.children.link(skel_coll)
+        rigids_coll = bpy.data.collections.new("Rigidbodies")
+        main_coll.children.link(rigids_coll)
+        
+        def move_object(obj, target_coll):
+            original_collections = list(obj.users_collection)
+            if target_coll.name not in [c.name for c in original_collections]:
+                target_coll.objects.link(obj)
+            for coll in original_collections:
+                if coll.name != target_coll.name:
+                    coll.objects.unlink(obj)
+
+        def get_hierarchy(parent_obj, hierarchy_list):
+            hierarchy_list.append(parent_obj)
+            for child in parent_obj.children:
+                get_hierarchy(child, hierarchy_list)
+
+        skeleton_obj = None
+        for obj in new_objects:
+            if obj.type == 'ARMATURE':
+                skeleton_obj = obj
+                break
+        if skeleton_obj:
+            skeleton_hierarchy = []
+            get_hierarchy(skeleton_obj, skeleton_hierarchy)
+            for obj_in_hierarchy in skeleton_hierarchy:
+                if obj_in_hierarchy in new_objects:
+                    move_object(obj_in_hierarchy, skel_coll)
+        
+        for obj in new_objects:
+            if obj.type == 'EMPTY':
+                move_object(obj, rigids_coll)
+
+        # --- FIX: Set the scene frame range based on the new animation ---
+        min_frame = float('inf'); max_frame = float('-inf'); found_animation = False
+        for obj in new_objects:
+            if obj and obj.animation_data and obj.animation_data.action:
+                found_animation = True
+                for fcurve in obj.animation_data.action.fcurves:
+                    frange = fcurve.range()
+                    if frange[0] < min_frame: min_frame = frange[0]
+                    if frange[1] > max_frame: max_frame = frange[1]
+        
+        if found_animation:
+            context.scene.frame_start = int(min_frame)
+            context.scene.frame_end = int(max_frame)
 
         # 2) Create rigs from empties containing '_bone'
-        empties = [o for o in bpy.data.objects if o.type == 'EMPTY' and '_bone' in o.name.lower()]
+        # --- MODIFICATION: Use the already identified new_objects for efficiency ---
+        empties = [o for o in new_objects if o.type == 'EMPTY' and '_bone' in o.name.lower()]
         if not empties:
             self.report({'WARNING'}, "No '_bone' empties found after import.")
             return {'CANCELLED'}
@@ -567,14 +633,10 @@ class OBJECT_OT_run_full_pipeline(bpy.types.Operator, ImportHelper):
             if armature_name in bpy.data.objects:
                 continue
 
-            # Determine parent_collection similarly to create_live_rigs
-            parent_collection = context.scene.collection
-            if original_empty.users_collection:
-                source_collection = original_empty.users_collection[0]
-                for top_level_coll in context.scene.collection.children:
-                    if source_collection.name in top_level_coll.children and top_level_coll.children[source_collection.name] == source_collection:
-                        parent_collection = top_level_coll
-                        break
+            # --- MODIFICATION: The collection logic can be simplified now ---
+            # The parent collection for the new "Rigidbody Skeletons" collection
+            # will be the main collection we created for this import.
+            parent_collection = main_coll
 
             target_collection = processed_parent_collections.get(parent_collection.name)
             if not target_collection:
