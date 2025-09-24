@@ -2,7 +2,7 @@
 bl_info = {
     "name": "OptiTrack: Rigidbody Tools",
     "author": "Oisin OSullivan",
-    "version": (1, 0, 2), # Fixed full pipeline operator
+    "version": (1, 0, 1), # Final UI label consistency pass
     "blender": (4, 5, 0),
     "location": "3D View > Sidebar (N) > OptiTrack",
     "description": "A tool to import, create, bake, and export rigs from animated OptiTrack empties. Heavily expanded version of Artell's *Empties to Bones* script. Now includes a one-click pipeline.",
@@ -13,11 +13,23 @@ bl_info = {
 
 import bpy
 import os
+import sys
+import subprocess
 from mathutils import Vector
 import bmesh
 from bpy_extras.io_utils import ImportHelper
 
-# --- Helper Property Groups ---
+# --- Helper Functions ---
+
+def open_folder_in_explorer(path):
+    """Opens a given folder path in the system's default file explorer."""
+    if sys.platform == "win32":
+        os.startfile(path)
+    elif sys.platform == "darwin": # macOS
+        subprocess.run(["open", path])
+    else: # linux
+        subprocess.run(["xdg-open", path])
+
 class RIGIDBODY_PG_name_entry(bpy.types.PropertyGroup):
     """Stores original and new names for the creation dialog."""
     original_name: bpy.props.StringProperty()
@@ -27,6 +39,68 @@ class RIGIDBODY_PG_armature_tracker(bpy.types.PropertyGroup):
     """Stores a reference to the created armature and its source empty."""
     armature_name: bpy.props.StringProperty()
     source_empty_name: bpy.props.StringProperty()
+
+
+# --- Reusable Bake Function ---
+def bake_all_tracked_rigs(context):
+    """
+    Bakes animation for all armatures currently being tracked by the addon.
+    This function is called by the bake operator and the pipeline operators.
+    """
+    tracked_armatures = list(context.scene.optitrack_tracked_armatures)
+    if not tracked_armatures:
+        # This function doesn't report to the user, the calling operator will.
+        return False, 0
+
+    original_active = context.active_object
+    original_selection = context.selected_objects[:]
+    
+    baked_count = 0
+    for tracked_item in tracked_armatures:
+        armature_obj = context.scene.objects.get(tracked_item.armature_name)
+        if not armature_obj:
+            print(f"OptiTrack Addon: Could not find armature '{tracked_item.armature_name}', skipping bake.")
+            continue
+
+        min_frame, max_frame = float('inf'), float('-inf')
+        
+        source_empty = context.scene.objects.get(tracked_item.source_empty_name)
+        if source_empty and source_empty.animation_data and source_empty.animation_data.action:
+            for fcurve in source_empty.animation_data.action.fcurves:
+                fmin, fmax = fcurve.range()
+                min_frame = min(min_frame, fmin)
+                max_frame = max(max_frame, fmax)
+        
+        if min_frame == float('inf'):
+            start_frame, end_frame = context.scene.frame_start, context.scene.frame_end
+        else:
+            start_frame, end_frame = int(min_frame), int(max_frame)
+
+        bpy.ops.object.select_all(action='DESELECT')
+        context.view_layer.objects.active = armature_obj
+        armature_obj.select_set(True)
+        
+        bpy.ops.object.mode_set(mode='POSE')
+        bpy.ops.pose.select_all(action='SELECT')
+        
+        bpy.ops.nla.bake(
+            frame_start=start_frame, frame_end=end_frame, step=1,
+            only_selected=True, visual_keying=True, clear_constraints=False,
+            clear_parents=False, bake_types={'POSE'}
+        )
+        
+        for p_bone in armature_obj.pose.bones:
+            while p_bone.constraints:
+                p_bone.constraints.remove(p_bone.constraints[0])
+        
+        bpy.ops.object.mode_set(mode='OBJECT')
+        baked_count += 1
+    
+    for obj in bpy.data.objects: obj.select_set(False)
+    for obj in original_selection: obj.select_set(True)
+    context.view_layer.objects.active = original_active
+
+    return True, baked_count
 
 
 # --- OPERATOR 0: Import FBX ---
@@ -47,6 +121,7 @@ class IMPORT_SCENE_OT_optitrack_fbx(bpy.types.Operator, ImportHelper):
             automatic_bone_orientation=True,
             anim_offset=0
         )
+        
         objects_after = set(context.scene.objects)
         new_objects = list(objects_after - objects_before)
         if not new_objects:
@@ -64,6 +139,7 @@ class IMPORT_SCENE_OT_optitrack_fbx(bpy.types.Operator, ImportHelper):
             original_collections = list(obj.users_collection)
             if target_coll.name not in [c.name for c in original_collections]:
                 target_coll.objects.link(obj)
+            
             for coll in original_collections:
                 if coll.name != target_coll.name:
                     coll.objects.unlink(obj)
@@ -73,6 +149,7 @@ class IMPORT_SCENE_OT_optitrack_fbx(bpy.types.Operator, ImportHelper):
             for child in parent_obj.children:
                 get_hierarchy(child, hierarchy_list)
 
+    
         skeleton_obj = None
         for obj in new_objects:
             if obj.type == 'ARMATURE':
@@ -97,6 +174,7 @@ class IMPORT_SCENE_OT_optitrack_fbx(bpy.types.Operator, ImportHelper):
                 found_animation = True
                 for fcurve in obj.animation_data.action.fcurves:
                     frange = fcurve.range()
+        
                     if frange[0] < min_frame: min_frame = frange[0]
                     if frange[1] > max_frame: max_frame = frange[1]
         
@@ -128,6 +206,7 @@ class OBJECT_OT_create_live_rigs(bpy.types.Operator):
     
     mode: bpy.props.EnumProperty(
         name="Mode",
+        
         items=[
             ('SELECTION', "From Selection", "Create rigs from selected empties containing '_bone'"),
             ('COLLECTION', "From Active Collection", "Create rigs from empties in the active collection containing '_bone'"),
@@ -135,6 +214,7 @@ class OBJECT_OT_create_live_rigs(bpy.types.Operator):
         ],
         default='SELECTION'
     )
+    
     
     def invoke(self, context, event):
         bone_empties_to_process = []
@@ -300,55 +380,12 @@ class OBJECT_OT_bake_tracked_rigs(bpy.types.Operator):
         return len(context.scene.optitrack_tracked_armatures) > 0
 
     def execute(self, context):
-        tracked_armatures = list(context.scene.optitrack_tracked_armatures)
-        if not tracked_armatures:
-            self.report({'WARNING'}, "No armatures are being tracked.")
+        success, baked_count = bake_all_tracked_rigs(context)
+        if not success:
+            self.report({'WARNING'}, "No armatures are being tracked to bake.")
             return {'CANCELLED'}
 
-        original_active = context.active_object
-        original_selection = context.selected_objects[:]
-        
-        for tracked_item in tracked_armatures:
-            armature_obj = context.scene.objects.get(tracked_item.armature_name)
-            if not armature_obj:
-                print(f"OptiTrack Addon: Could not find armature '{tracked_item.armature_name}', skipping bake.")
-                continue
-
-            min_frame, max_frame = float('inf'), float('-inf')
-            
-            source_empty = context.scene.objects.get(tracked_item.source_empty_name)
-            if source_empty and source_empty.animation_data and source_empty.animation_data.action:
-                for fcurve in source_empty.animation_data.action.fcurves:
-                    fmin, fmax = fcurve.range()
-                    min_frame = min(min_frame, fmin)
-                    max_frame = max(max_frame, fmax)
-            
-            if min_frame == float('inf'):
-                start_frame, end_frame = context.scene.frame_start, context.scene.frame_end
-            else:
-                start_frame, end_frame = int(min_frame), int(max_frame)
-
-            context.view_layer.objects.active = armature_obj
-            bpy.ops.object.mode_set(mode='POSE')
-            bpy.ops.pose.select_all(action='SELECT')
-            
-            bpy.ops.nla.bake(
-                frame_start=start_frame, frame_end=end_frame, step=1,
-                only_selected=True, visual_keying=True, clear_constraints=False,
-                clear_parents=False, bake_types={'POSE'}
-            )
-            
-            for p_bone in armature_obj.pose.bones:
-                while p_bone.constraints:
-                    p_bone.constraints.remove(p_bone.constraints[0])
-        
-        bpy.ops.object.mode_set(mode='OBJECT')
-        
-        for obj in bpy.data.objects: obj.select_set(False)
-        for obj in original_selection: obj.select_set(True)
-        context.view_layer.objects.active = original_active
-
-        self.report({'INFO'}, f"Baked {len(tracked_armatures)} tracked armatures.")
+        self.report({'INFO'}, f"Baked {baked_count} tracked armatures.")
         return {'FINISHED'}
 
 # --- OPERATOR 3: Clear Tracked Armatures ---
@@ -433,7 +470,11 @@ class OBJECT_OT_export_all_rigs_for_unreal(bpy.types.Operator, ImportHelper):
         for obj in original_selection: obj.select_set(True)
         context.view_layer.objects.active = original_active
         
-        self.report({'INFO'}, f"Exported {export_count} armatures to {export_path}")
+        context.scene.optitrack_tracked_armatures.clear()
+        self.report({'INFO'}, f"Exported {export_count} armatures to {export_path} and cleared tracked list.")
+        
+        open_folder_in_explorer(export_path)
+        
         return {'FINISHED'}
 
     def invoke(self, context, event):
@@ -492,6 +533,7 @@ class OBJECT_OT_export_selected_rigs_for_unreal(bpy.types.Operator, ImportHelper
 
             bpy.ops.export_scene.fbx(
                 filepath=filepath,
+                
                 use_selection=True,
                 
                 add_leaf_bones=False,
@@ -499,6 +541,7 @@ class OBJECT_OT_export_selected_rigs_for_unreal(bpy.types.Operator, ImportHelper
                 bake_anim_use_nla_strips=False,
                 bake_anim_use_all_actions=False,
                 bake_anim_force_startend_keying=True,
+                
                 bake_anim_simplify_factor=0.0,
                 object_types={'ARMATURE', 'MESH'},
                 axis_forward='-X',
@@ -511,7 +554,11 @@ class OBJECT_OT_export_selected_rigs_for_unreal(bpy.types.Operator, ImportHelper
         for obj in original_selection: obj.select_set(True)
         context.view_layer.objects.active = original_active
         
-        self.report({'INFO'}, f"Exported {export_count} selected armatures to {export_path}")
+        context.scene.optitrack_tracked_armatures.clear()
+        self.report({'INFO'}, f"Exported {export_count} selected armatures to {export_path} and cleared tracked list.")
+        
+        open_folder_in_explorer(export_path)
+        
         return {'FINISHED'}
 
     def invoke(self, context, event):
@@ -524,7 +571,7 @@ class OBJECT_OT_export_selected_rigs_for_unreal(bpy.types.Operator, ImportHelper
         return {'RUNNING_MODAL'}
 
 
-# --- NEW: OPERATOR 6: Full Pipeline (Import -> Create -> Bake -> Export) ---
+# --- OPERATOR 6: Full Pipeline (Import -> Create -> Bake -> Export) ---
 class OBJECT_OT_run_full_pipeline(bpy.types.Operator, ImportHelper):
     """Runs the complete pipeline: imports an FBX, creates armatures from _bone empties, bakes them, and exports FBX files for Unreal."""
     bl_idname = "object.run_full_optitrack_pipeline"
@@ -607,6 +654,7 @@ class OBJECT_OT_run_full_pipeline(bpy.types.Operator, ImportHelper):
                 found_animation = True
                 for fcurve in obj.animation_data.action.fcurves:
                     frange = fcurve.range()
+        
                     if frange[0] < min_frame: min_frame = frange[0]
                     if frange[1] > max_frame: max_frame = frange[1]
         
@@ -672,6 +720,7 @@ class OBJECT_OT_run_full_pipeline(bpy.types.Operator, ImportHelper):
             bm = bmesh.new()
             bmesh.ops.create_cube(bm, size=cube_size)
             bm.to_mesh(mesh)
+            
             bm.free()
             mod = cube.modifiers.new(name="Armature", type='ARMATURE')
             mod.object = armature_obj
@@ -698,15 +747,190 @@ class OBJECT_OT_run_full_pipeline(bpy.types.Operator, ImportHelper):
             item.source_empty_name = original_empty.name
 
         # 3) Bake
-        try:
-            bpy.ops.object.bake_tracked_rigs()
-        except Exception as e:
-            self.report({'ERROR'}, f"Bake failed: {e}")
+        success, _ = bake_all_tracked_rigs(context)
+        if not success:
+            self.report({'ERROR'}, f"Bake failed. No rigs were tracked.")
             return {'CANCELLED'}
 
         # 4) Export
-        # Choose base export directory: same folder as imported FBX
-        base_dir = os.path.dirname(self.filepath) if self.filepath else os.path.dirname(bpy.data.filepath) if bpy.data.filepath else os.path.abspath('.')
+        # --- MODIFIED: Export path is now relative to the .blend file for consistency ---
+        base_dir = os.path.dirname(bpy.data.filepath) if bpy.data.filepath else os.path.abspath('.')
+        if base_dir == '.' and not bpy.data.filepath:
+            self.report({'WARNING'}, "Please save the .blend file to set an export location.")
+
+        export_path = os.path.join(base_dir, folder_name)
+        os.makedirs(export_path, exist_ok=True)
+
+        export_count = 0
+        tracked_armatures = list(context.scene.optitrack_tracked_armatures)
+        original_active = context.active_object
+        original_selection = context.selected_objects[:]
+
+        for tracked_item in tracked_armatures:
+            armature_obj = context.scene.objects.get(tracked_item.armature_name)
+            if not armature_obj: continue
+            mesh_children = [child for child in armature_obj.children if child.type == 'MESH']
+            if not mesh_children: continue
+
+            bpy.ops.object.select_all(action='DESELECT')
+            armature_obj.select_set(True)
+            for mesh in mesh_children:
+                mesh.select_set(True)
+            
+            context.view_layer.objects.active = armature_obj
+
+            filename = f"{armature_obj.name}.fbx"
+            filepath = os.path.join(export_path, filename)
+
+            bpy.ops.export_scene.fbx(
+                filepath=filepath,
+                use_selection=True,
+                add_leaf_bones=False,
+                bake_anim=True,
+                bake_anim_use_nla_strips=False,
+                bake_anim_use_all_actions=False,
+                bake_anim_force_startend_keying=True,
+                bake_anim_simplify_factor=0.0,
+                object_types={'ARMATURE', 'MESH'},
+            
+                axis_forward='-X',
+                axis_up='Z',
+                apply_scale_options='FBX_SCALE_ALL'
+            )
+            export_count += 1
+
+        bpy.ops.object.select_all(action='DESELECT')
+        for obj in original_selection: obj.select_set(True)
+        context.view_layer.objects.active = original_active
+        
+        context.scene.optitrack_tracked_armatures.clear()
+        self.report({'INFO'}, f"Full pipeline completed. Exported {export_count} FBX(s) to {export_path} and cleared tracked list.")
+        
+        open_folder_in_explorer(export_path)
+        
+        return {'FINISHED'}
+
+    def invoke(self, context, event):
+        # Set sensible defaults from scene
+        if context.blend_data.filepath:
+            blend_name = bpy.path.display_name_from_filepath(context.blend_data.filepath)
+            context.scene.optitrack_export_folder_name = f"{blend_name}_Export"
+        context.window_manager.fileselect_add(self)
+        return {'RUNNING_MODAL'}
+
+
+# --- OPERATOR 7: Post-Import Pipeline (Create -> Bake -> Export) ---
+class OBJECT_OT_run_post_import_pipeline(bpy.types.Operator):
+    """Runs the pipeline on already imported/existing objects: creates armatures from _bone empties, bakes them, and exports FBX files for Unreal."""
+    bl_idname = "object.run_post_import_optitrack_pipeline"
+    bl_label = "Run Post-Import OptiTrack Pipeline" # Label will be overwritten in draw for consistency
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        scene = context.scene
+        cube_size = getattr(scene, 'optitrack_cube_size', 1.0)
+        cleanup_mode = getattr(scene, 'optitrack_cleanup_empties', 'HIDE')
+        folder_name = getattr(scene, 'optitrack_export_folder_name', "Exported_Rigidbody_Armatures")
+
+        # 1) Get empties from ALL in scene
+        bone_empties_to_process = [obj for obj in bpy.data.objects if obj.type == 'EMPTY' and "_bone" in obj.name.lower()]
+
+        if not bone_empties_to_process:
+            self.report({'INFO'}, "No empties containing '_bone' were found in the scene.")
+            return {'CANCELLED'}
+
+        # 2) Create rigs from empties containing '_bone'
+        processed_parent_collections = {}
+        for original_empty in bone_empties_to_process:
+            lower_name = original_empty.name.lower()
+            bone_index = lower_name.find('_bone')
+            prefix = original_empty.name[:bone_index]
+            suffix = original_empty.name[bone_index + 5:]
+            new_base_name = prefix + suffix
+            armature_name = f"{new_base_name}_Armature"
+            if armature_name in bpy.data.objects:
+                continue
+
+            parent_collection = context.scene.collection
+            if original_empty.users_collection:
+                source_collection = original_empty.users_collection[0]
+                for top_level_coll in context.scene.collection.children:
+                    if source_collection.name in top_level_coll.children and top_level_coll.children[source_collection.name] == source_collection:
+                        parent_collection = top_level_coll
+                        break
+
+            target_collection = processed_parent_collections.get(parent_collection.name)
+            if not target_collection:
+                collection_name = "Rigidbody Skeletons"
+                target_collection = parent_collection.children.get(collection_name)
+                if not target_collection:
+                    target_collection = bpy.data.collections.new(collection_name)
+                    parent_collection.children.link(target_collection)
+                processed_parent_collections[parent_collection.name] = target_collection
+
+            bpy.ops.object.armature_add(enter_editmode=True, location=(0, 0, 0))
+            armature_obj = context.active_object
+            armature_obj.name = armature_name
+            bone = armature_obj.data.edit_bones[0]
+            bone.name = original_empty.name
+            bone.head = original_empty.matrix_world.to_translation()
+            bone.tail = bone.head + Vector((0, 0, cube_size * 2))
+            bpy.ops.object.mode_set(mode='OBJECT')
+
+            object_mode_bone = armature_obj.data.bones.get(original_empty.name)
+            if not object_mode_bone:
+                bpy.data.objects.remove(armature_obj, do_unlink=True)
+                continue
+
+            loc = armature_obj.matrix_world @ object_mode_bone.head_local
+            mesh = bpy.data.meshes.new(f"{object_mode_bone.name}_cube_mesh")
+            cube = bpy.data.objects.new(f"{object_mode_bone.name}_cube", mesh)
+            cube.location = loc
+            cube.parent = armature_obj
+            target_collection.objects.link(cube)
+            bm = bmesh.new()
+            bmesh.ops.create_cube(bm, size=cube_size)
+            bm.to_mesh(mesh)
+            bm.free()
+            mod = cube.modifiers.new(name="Armature", type='ARMATURE')
+            mod.object = armature_obj
+            vg = cube.vertex_groups.new(name=object_mode_bone.name)
+            vg.add([v.index for v in cube.data.vertices], 1.0, 'REPLACE')
+
+            context.view_layer.objects.active = armature_obj
+            bpy.ops.object.mode_set(mode='POSE')
+            p_bone = armature_obj.pose.bones[0]
+            constraint = p_bone.constraints.new(type='COPY_TRANSFORMS')
+            constraint.target = original_empty
+            bpy.ops.object.mode_set(mode='OBJECT')
+
+            if cleanup_mode != 'NOTHING':
+                if cleanup_mode == 'HIDE': original_empty.hide_set(True)
+                elif cleanup_mode == 'DELETE': bpy.data.objects.remove(original_empty, do_unlink=True)
+
+            for coll in armature_obj.users_collection:
+                coll.objects.unlink(armature_obj)
+            target_collection.objects.link(armature_obj)
+
+            item = context.scene.optitrack_tracked_armatures.add()
+            item.armature_name = armature_obj.name
+            item.source_empty_name = original_empty.name
+
+        # 3) Bake
+        if not context.scene.optitrack_tracked_armatures:
+            self.report({'WARNING'}, "No new armatures were created to bake.")
+            return {'CANCELLED'}
+
+        success, _ = bake_all_tracked_rigs(context)
+        if not success:
+            self.report({'ERROR'}, f"Bake failed. No new rigs were tracked to bake.")
+            return {'CANCELLED'}
+
+        # 4) Export
+        base_dir = os.path.dirname(bpy.data.filepath) if bpy.data.filepath else os.path.abspath('.')
+        if base_dir == '.' and not bpy.data.filepath:
+            self.report({'WARNING'}, "Please save the .blend file to set an export location.")
+
         export_path = os.path.join(base_dir, folder_name)
         os.makedirs(export_path, exist_ok=True)
 
@@ -750,16 +974,12 @@ class OBJECT_OT_run_full_pipeline(bpy.types.Operator, ImportHelper):
         for obj in original_selection: obj.select_set(True)
         context.view_layer.objects.active = original_active
 
-        self.report({'INFO'}, f"Full pipeline completed: imported, created {len(tracked_armatures)} armatures, exported {export_count} FBX(s) to {export_path}")
+        context.scene.optitrack_tracked_armatures.clear()
+        self.report({'INFO'}, f"Post-import pipeline completed. Exported {export_count} FBX(s) to {export_path} and cleared tracked list.")
+        
+        open_folder_in_explorer(export_path)
+        
         return {'FINISHED'}
-
-    def invoke(self, context, event):
-        # Set sensible defaults from scene
-        if context.blend_data.filepath:
-            blend_name = bpy.path.display_name_from_filepath(context.blend_data.filepath)
-            context.scene.optitrack_export_folder_name = f"{blend_name}_Export"
-        context.window_manager.fileselect_add(self)
-        return {'RUNNING_MODAL'}
 
 
 # --- UI Panels ---
@@ -809,7 +1029,7 @@ class VIEW3D_PT_optitrack_rigidbody_panel(bpy.types.Panel):
         box_export.label(text="Step 3: Export Armatures", icon='EXPORT')
         col_export = box_export.column()
         
-        col_export.prop(context.scene, "optitrack_export_folder_name", text="Folder Name")
+        col_export.prop(context.scene, "optitrack_export_folder_name", text="Export Folder")
         
         col_export_sel = col_export.column()
         col_export_sel.enabled = any(obj.type == 'ARMATURE' for obj in context.selected_objects)
@@ -819,7 +1039,7 @@ class VIEW3D_PT_optitrack_rigidbody_panel(bpy.types.Panel):
         col_export_all.enabled = len(context.scene.optitrack_tracked_armatures) > 0
         col_export_all.operator(OBJECT_OT_export_all_rigs_for_unreal.bl_idname)
 
-# --- NEW: Automation Panel ---
+# --- Automation Panel ---
 class VIEW3D_PT_optitrack_automation_panel(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -841,9 +1061,17 @@ class VIEW3D_PT_optitrack_automation_panel(bpy.types.Panel):
 
         row = box.row(align=True)
         row.prop(scene, "optitrack_cleanup_empties", text="Cleanup")
-
+        
         box.separator()
-        box.operator(OBJECT_OT_run_full_pipeline.bl_idname, text="Run Full Pipeline", icon='PLAY')
+        
+        note_box = box.box()
+        note_box.label(text="Pipelines export next to your saved .blend file.", icon='INFO')
+        
+        box.separator()
+
+        box.operator(OBJECT_OT_run_full_pipeline.bl_idname, text="Run Full Pipeline (from file)", icon='PLAY')
+        box.operator(OBJECT_OT_run_post_import_pipeline.bl_idname, text="Run on Imported Scene", icon='PLAY')
+
 
 # --- Registration ---
 classes = (
@@ -856,6 +1084,7 @@ classes = (
     OBJECT_OT_export_all_rigs_for_unreal,
     OBJECT_OT_export_selected_rigs_for_unreal,
     OBJECT_OT_run_full_pipeline,
+    OBJECT_OT_run_post_import_pipeline,
     VIEW3D_PT_optitrack_importer_panel,
     VIEW3D_PT_optitrack_rigidbody_panel,
     VIEW3D_PT_optitrack_automation_panel,
