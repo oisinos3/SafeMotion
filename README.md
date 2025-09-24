@@ -52,7 +52,7 @@ This workflow gives you the most control over each stage of the process.
 #### Step 3: Bake Armatures
 * Once you are happy with the generated rigs, go to "Step 2: Bake Created Armatures".
 * Click `Bake Created Armatures`. This will bake the animation from the source empties onto the bones of the new armatures and remove the constraints.
-* The trash can icon next to the title can be used to manually clear the addon's internal list of tracked armatures if needed.
+* The bin icon next to the title can be used to manually clear the addon's internal list of tracked armatures if needed.
 
 #### Step 4: Export
 * Go to "Step 3: Export Armatures".
