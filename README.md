@@ -79,7 +79,7 @@ There are two main automation operators:
     * It will first ask you to select an `.fbx` file to import.
     * It will then automatically create rigs for all `_bone` empties found within that file, bake their animations, and export them as individual `.fbx` files.
 
-2.  **Run on Entire Scene**:
+2.  **Run on Imported Scene**:
     * This operator is for when you have already imported your FBX (or have the necessary empties in your scene).
     * It will scan the entire current scene for any `_bone` empties, create rigs, bake them, and export them.
 
