@@ -74,6 +74,11 @@ To set up the animation with proper scrubbing and playback controls, use the **S
 4.  Choose the correct animation asset from the drop-down menu.
 5.  Repeat this process for all of your rigid bodies to create their respective animation tracks in the Sequencer.
 
+<div align="center">
+<img width="767" height="248" alt="image" src="https://github.com/user-attachments/assets/a636201d-4f23-4594-8415-5ae200918ae8" />
+</div>
+
+
 
 ---
 
