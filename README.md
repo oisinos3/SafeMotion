@@ -11,11 +11,11 @@ The repository is actively maintained and serves as a central hub for all projec
 
   * **Blender Addon & Documentation**: A custom Blender addon for converting Motive FBX rigidbodies into armatures for use in Unreal Engine.
 
-      * [Find it here](https://www.google.com/search?q=hyperlink)
+      * [Find it here](https://github.com/oisinos3/SafeMotion/tree/main/Rigidbody%20Generator%20Addon)
 
   * **Unreal Engine Setup**: Instructions for importing and setting up the rigid body armatures within Unreal Engine.
 
-      * [Find it here](https://www.google.com/search?q=hyperlink)
+      * [Find it here](https://github.com/oisinos3/SafeMotion/blob/main/rigidbody_unreal_import.md)
 
 -----
 
@@ -29,8 +29,8 @@ The repository is actively maintained and serves as a central hub for all projec
 
 ### ✅ Features Checklist
 
-  * [ ] Blender Addon
-  * [ ] Unreal Engine Setup Guide
+  * [✅] Blender Addon
+  * [✅] Unreal Engine Setup Guide
   * [ ] Metahuman Retargeting Guide
   * [ ] Required Settings List
   * [ ] Methodology Guide
