@@ -1,6 +1,6 @@
-### File Naming & Contents
+### File Contents
 
-The files in this folder are named to reflect their contents and required processing steps.
+The files in this folder are the most recent takes recorded, and are named to reflect their contents and required processing steps.
 
 ---
 
