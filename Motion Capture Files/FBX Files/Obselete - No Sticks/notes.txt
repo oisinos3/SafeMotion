@@ -1,0 +1,1 @@
+Won't work with Unreal as there's no Mesh attached to the skeleton or Rigidbodies - need to turn on "skeletal mesh" setting for both when exporting from Motive.
