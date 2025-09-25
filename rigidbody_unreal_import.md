@@ -27,7 +27,7 @@ Import the primary human animations. If there are any skeleton conflicts, you ca
 
 ## 3. Configure Sockets on Skeletons
 
-Open the **skeleton** (not the skeletal meshes) of your rigid bodies. Set up the necessary sockets on these skeletons. The sockets are necessary for attaching other meshes and aligning them with the OptiTrack data.
+Open the **skeleton** (not the skeletal meshes) of your rigid bodies. Set up the necessary sockets on these skeletons. The sockets are necessary for attaching other meshes and aligning them with the OptiTrack data. Note that the socket will by default be placed at the base of the bone you've selected, it can be moved if needed.
 
 <div align="center">
 <img width="527" height="375" alt="image" src="https://github.com/user-attachments/assets/e9f2f905-7fc1-429c-92f2-dcbfd73b56c7" />
@@ -50,6 +50,10 @@ Create a new Actor Blueprint and follow these steps:
 3.  Bring in your 3D meshes (these should be designed to realistically match your rigid bodies), and parent them beneath their skeletal mesh counterpart.
 4.  For each 3D mesh, find the **Parent Socket** property and set it to the socket you created on the skeleton.
 
+
+The pivot points of the 3D meshes will now match the rigid body locations, but you will likely need to adjust the scale, rotation, and final position of the meshes to perfectly suit your model.
+
+
 <div align="center">
 <img width="375" height="213" alt="image" src="https://github.com/user-attachments/assets/98e75104-2fef-4f9a-842f-57e1974a1f29" />
 </div>
@@ -57,10 +61,6 @@ Create a new Actor Blueprint and follow these steps:
 <div align="center">
 <img width="754" height="247" alt="image" src="https://github.com/user-attachments/assets/eb5e678e-f225-4f96-b8c3-7e18a2dd469f" />
 </div>
-
-
-The pivot points of the 3D meshes will now match the rigid body locations, but you will likely need to adjust the scale, rotation, and final position of the meshes to perfectly suit your model.
-
 
 ---
 
