@@ -19,18 +19,9 @@ Drag and drop the **Rigidbody_Export** folder directly into your Unreal Engine p
 
 Import the primary human animations. If there are any skeleton conflicts, you can clear the skeleton association; the skeleton itself will still import correctly.
 
-<div align="center">
-<img width="997" height="783" alt="image" src="https://github.com/user-attachments/assets/a609fdf8-9ef3-4eae-a7b3-03882e3c3fa0" />
-</div>
-
-<div align="center">
-<img width="776" height="208" alt="image" src="https://github.com/user-attachments/assets/c3a790cf-e8cf-434e-9627-7ccbd52c3620" />
-</div>
-
-<div align="center">
-<img width="1002" height="781" alt="image" src="https://github.com/user-attachments/assets/07e51669-db99-4b9b-bca3-698882e580c8" />
-</div>
-
+| Image 1 | Image 2 | Image 3 |
+|:---:|:---:|:---:|
+| <img src="https://github.com/user-attachments/assets/a609fdf8-9ef3-4eae-a7b3-03882e3c3fa0" width="300"/> | <img src="https://github.com/user-attachments/assets/c3a790cf-e8cf-434e-9627-7ccbd52c3620" width="300"/> | <img src="https://github.com/user-attachments/assets/07e51669-db99-4b9b-bca3-698882e580c8" width="300"/> |
 
 ---
 
