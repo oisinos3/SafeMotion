@@ -16,6 +16,9 @@ The repository is actively maintained and serves as a central hub for all projec
 * **Unreal Engine Setup**: Instructions for importing and setting up the rigid body armatures within Unreal Engine.
   * [Find it here](https://github.com/oisinos3/SafeMotion/blob/main/rigidbody_unreal_import.md)
 
+* **FBX Files**: List of organised FBX Files, including documentation on the files contents.
+  * [Find it here](https://github.com/oisinos3/SafeMotion/tree/main/Motion%20Capture%20Files)
+
 ---
 
 ### **🎬 Export & Workflow Best Practices**
@@ -35,7 +38,7 @@ The repository is actively maintained and serves as a central hub for all projec
 ### 💡 Upcoming Documentation
 
 * Instructions for retargeting skeletons to Metahumans and iClone characters.
-* A list of required settings and best practices when recording with Motive.
+* Hosted Unreal Engine project files.
 
 ---
 
