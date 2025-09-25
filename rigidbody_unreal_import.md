@@ -21,7 +21,7 @@ Import the primary human animations. If there are any skeleton conflicts, you ca
 
 | Image 1 | Image 2 | Image 3 |
 |:---:|:---:|:---:|
-| <img src="https://github.com/user-attachments/assets/a609fdf8-9ef3-4eae-a7b3-03882e3c3fa0" width="300"/> | <img src="https://github.com/user-attachments/assets/c3a790cf-e8cf-434e-9627-7ccbd52c3620" width="300"/> | <img src="https://github.com/user-attachments/assets/07e51669-db99-4b9b-bca3-698882e580c8" width="500"/> |
+| <img src="https://github.com/user-attachments/assets/a609fdf8-9ef3-4eae-a7b3-03882e3c3fa0" width="500"/> | <img src="https://github.com/user-attachments/assets/c3a790cf-e8cf-434e-9627-7ccbd52c3620" width="500"/> | <img src="https://github.com/user-attachments/assets/07e51669-db99-4b9b-bca3-698882e580c8" width="500"/> |
 
 ---
 
