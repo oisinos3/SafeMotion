@@ -27,7 +27,17 @@ Import the primary human animations. If there are any skeleton conflicts, you ca
 
 ## 3. Configure Sockets on Skeletons
 
-Open the **skeletons** (not the skeletal meshes) for your rigid bodies. Set up the necessary sockets on these skeletons. The sockets are crucial for attaching other meshes and aligning them with the OptiTrack data.
+Open the **skeleton** (not the skeletal meshes) of your rigid bodies. Set up the necessary sockets on these skeletons. The sockets are necessary for attaching other meshes and aligning them with the OptiTrack data.
+
+<div align="center">
+<img width="527" height="375" alt="image" src="https://github.com/user-attachments/assets/e9f2f905-7fc1-429c-92f2-dcbfd73b56c7" />
+</div>
+
+<div align="center">
+<img width="236" height="70" alt="image" src="https://github.com/user-attachments/assets/aabd15b1-acba-4d99-8ad4-91422a820660" />
+</div>
+
+
 
 ---
 
