@@ -6,7 +6,7 @@ This guide provides a step-by-step process for setting up an Unreal Engine level
 
 ## 1. Import OptiTrack Rigid Body Assets
 
-Drag and drop the **Rigidbody_Export** folder directly into your Unreal Engine project's Content Browser. This folder should contain the skeletal meshes, skeletons, and animation assets for your rigid bodies. If prompted during import, you may need to set the import settings to "closest frame boundary."
+Drag and drop the **Rigidbody_Export** folder directly into your Unreal Engine project's Content Browser. This folder should contain the skeletal meshes, skeletons, and animation assets for your rigid bodies. If prompted during import, you may need to check the "Closest Frame Boundary" box in the Animation settings menu.
 
 ---
 
