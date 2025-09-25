@@ -19,18 +19,17 @@ The repository is actively maintained and serves as a central hub for all projec
 
 -----
 
-### 💡 Upcoming Content
+### 💡 Upcoming Documentation
 
-  * Instructions for retargeting Metahumans and iClone characters.
-  * A list of required settings and best practices.
-  * A guide on effective methodology.
+  * Instructions for retargeting skeletons to Metahumans and iClone characters.
+  * A list of required settings and best practices when recording with Motive.
 
 -----
 
 ### ✅ Features Checklist
 
-  * [✅] Blender Addon
-  * [✅] Unreal Engine Setup Guide
+  * [x] Blender Addon
+  * [x] Unreal Engine Setup Guide
   * [ ] Metahuman Retargeting Guide
   * [ ] Required Settings List
   * [ ] Methodology Guide
