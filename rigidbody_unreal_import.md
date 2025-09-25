@@ -8,7 +8,9 @@ This guide provides a step-by-step process for setting up an Unreal Engine level
 
 Drag and drop the **Rigidbody_Export** folder directly into your Unreal Engine project's Content Browser. This folder should contain the skeletal meshes, skeletons, and animation assets for your rigid bodies. If prompted during import, you may need to check the "Closest Frame Boundary" box in the Animation settings menu.
 
-<img width="565" height="66" alt="image" src="https://github.com/user-attachments/assets/94d4794e-5f4a-43a6-a789-5d0b3cbaf2e6" />
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/94d4794e-5f4a-43a6-a789-5d0b3cbaf2e6" width="565" height="66" alt="image" />
+</div>
 
 
 ---
