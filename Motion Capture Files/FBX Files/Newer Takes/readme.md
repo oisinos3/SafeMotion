@@ -1,5 +1,9 @@
-The "RigidBodies_Only" files, have no human skeletons or skeletal meshes, and only show rigidbodies - they must be processed through the Blender addon in order to be read by Unreal, as they don't have a skeletal mesh/armature attached.
+### File Naming & Contents
 
-The "Box_Handoff" files are the opposite - there is no rigidbodies included, as it was a take with only Julian and myself handing the boxes between each other to test two suits interacting in the system.
+The files in this folder are named to reflect their contents and required processing steps.
 
-The rest of the files contain skeletons, and rigidbody empties that must be processed through Blender before being read into Unreal.
+---
+
+* **`RigidBodies_Only` files:** These files contain only rigid bodies with no human skeletons or skeletal meshes. They **must be processed through the Blender addon** to be read by Unreal, as they lack a skeletal mesh or armature.
+* **`Box_Handoff` files:** These files contain no rigid bodies. They were recorded to test the interaction between two human subjects (Julian and myself) handing off boxes.
+* **All other files:** These files contain both human skeletons and rigidbody empties. The rigidbody empties **must be processed through the Blender addon** before being imported into Unreal.
