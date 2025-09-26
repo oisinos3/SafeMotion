@@ -17,7 +17,7 @@ The repository is actively maintained and serves as a central hub for all projec
   * [Find it here](https://github.com/oisinos3/SafeMotion/blob/main/rigidbody_unreal_import.md)
 
 * **FBX Files**: List of organised FBX Files, including documentation on the files contents.
-  * [Find it here](https://github.com/oisinos3/SafeMotion/tree/main/Motion%20Capture%20Files)
+  * [Find them here](https://github.com/oisinos3/SafeMotion/tree/main/Motion%20Capture%20Files)
 
 ---
 
@@ -29,9 +29,9 @@ The repository is actively maintained and serves as a central hub for all projec
 
 ### **For Best Practice & Accurate Matching**
 
-* **Mark Pivot Points:** In Motive, make a note of or physically mark the pivot point of each rigid body. This ensures you know its exact location, which is vital for accurate alignment when placing and parenting objects in Unreal.
-* **Mark the Floor Point:** Mark and export the floor point from your Motive capture. This provides a consistent reference for the ground plane, helping to align your entire scene correctly in Unreal Engine.
-* **Collect Reference Footage:** As you record your motion capture data, simultaneously capture reference footage. This video serves as a valuable tool for quality assurance, troubleshooting, and verifying the accuracy of your animation in post-production.
+* **Mark Pivot Points:** In Motive, make a note of or physically mark the pivot point of each rigid body. This ensures we know its exact location, for accurate alignment when placing and parenting objects in Unreal.
+* **Mark the Floor Point:** Mark and export the floor point from thr Motive capture. This provides a consistent reference for the ground plane, helping to align your entire scene correctly in Unreal Engine.
+* **Collect Reference Footage:** As you record your motion capture data, simultaneously capture reference footage to be sure the captured data is accurate, and can help match rigidbodies etc.
 
 ---
 
@@ -45,7 +45,8 @@ The repository is actively maintained and serves as a central hub for all projec
 ### ✅ Features Checklist
 
 * [x] Blender Addon
-* [x] Unreal Engine Setup Guide
+* [x] Unreal Engine Rigidbodies Setup Guide
+* [x] Hosted FBX Files
 * [ ] Metahuman Retargeting Guide
 * [ ] Required Settings List
-* [ ] Methodology Guide
+* [x] Methodology Guide
