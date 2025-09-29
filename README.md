@@ -1,6 +1,6 @@
 ---
 
-# SafeMotion Project
+### SafeMotion Project
 
 | Progress Bar | Percentage |
 |:---|:---|
