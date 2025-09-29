@@ -1,10 +1,14 @@
----
+### Project Time Tracking (120/205 Hours)
 
-### SafeMotion Project
+You are currently at **120 hours** out of **205 hours** total (**58.5%** complete).
 
 | Progress Bar | Percentage |
 |:---|:---|
 | ████████████░░░░░░░░ | **58.5%** |
+
+***
+
+# SafeMotion Project
 
 This is the project repository for all documentation, assets, information, and tutorials on the **SafeMotion project**. The project utilizes **OptiTrack motion capture** to help visualize safety procedures and the effects of unsafe manual handling.
 
