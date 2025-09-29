@@ -2,6 +2,10 @@
 
 # SafeMotion Project
 
+| Progress Bar | Percentage |
+|:---|:---|
+| ████████████░░░░░░░░ | **58.5%** |
+
 This is the project repository for all documentation, assets, information, and tutorials on the **SafeMotion project**. The project utilizes **OptiTrack motion capture** to help visualize safety procedures and the effects of unsafe manual handling.
 
 The repository is actively maintained and serves as a central hub for all project resources.
