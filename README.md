@@ -14,8 +14,6 @@ Currently at **120 hours** out of **205 hours** total (**58.5%** complete).
 |:---|:---|
 | ████████████░░░░░░░░ | **58.5%** |
 
-***
-
 ---
 
 ### ⚙️ Core Components & Documentation
