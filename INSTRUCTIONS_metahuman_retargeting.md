@@ -1,6 +1,6 @@
 ---
 
-# Here I will add instructions for retargeting our motion capture animation to Unreal Metahumans.
+# NEEDS UPDATING - WILL BE METAHUMAN RETARGETING INSTRUCTIONS
 
 <img width="368" height="931" alt="image" src="https://github.com/user-attachments/assets/90dcfaab-fedb-41e6-a3b7-5fa71f16e62d" />
 
