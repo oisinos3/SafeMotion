@@ -1,3 +1,4 @@
+
 # OptiTrack Rigidbody Generator for Blender
 
 A Blender addon for converting OptiTrack rigidbody animations into skeletal meshes suitable for game engines like Unreal Engine.
@@ -24,7 +25,7 @@ This tool streamlines the workflow of importing animated empties from an OptiTra
 2.  In Blender, go to `Edit` > `Preferences...`
 3.  Navigate to the `Add-ons` tab and click `Install...`
 4.  Select the `empties-to-rigidbodies.py` file and click `Install Add-on`.
-5.  Find the "OptiTrack: Rigidbody Tools" addon in the list and enable it by checking the box.
+5.  Find the "Rigidbody Tools" addon in the list and enable it by checking the box.
 
 The addon's panels will now be available in the 3D View's sidebar (press `N` to open).
 
