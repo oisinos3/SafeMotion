@@ -4,7 +4,7 @@ A comprehensive Blender addon providing basic rigging and animation utilities. O
 
 ## Features
 
-### 🦴 Quick Bone Renamer
+### Quick Bone Renamer
 Transfer bone names between armatures easily - perfect for animation retargeting, cleaning up Mixamo/Rigify imports, or matching naming conventions across different rigs.
 
 - **One-Click Renaming**: Copy and apply bone names between armatures instantly
@@ -14,7 +14,7 @@ Transfer bone names between armatures easily - perfect for animation retargeting
 - **Manual Override**: Optional two-step workflow for editing names before applying
 - **Clear UI Guidance**: Contextual warnings and step-by-step instructions
 
-### 📐 Safe Apply Scale
+### Safe Apply Scale
 Apply scale transformations to armatures and their entire hierarchy without breaking skinning, parenting, or vertex weights. Essential for clean exports to game engines like Unreal Engine.
 
 - **Automatic Hierarchy Detection**: Finds and processes all child objects recursively
