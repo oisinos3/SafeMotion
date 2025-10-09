@@ -3,7 +3,7 @@
 
 A Blender addon for converting OptiTrack rigidbody animations into skeletal meshes suitable for game engines like Unreal Engine.
 
-This tool streamlines the workflow of importing animated empties from an OptiTrack FBX, generating single-bone armatures for each, baking the animation, and exporting them as game-ready FBX files. It provides both a manual step-by-step process and a fully automated one-click pipeline.
+This tool streamlines the workflow of importing animated empties from an OptiTrack FBX, generating single-bone armatures for each, baking the animation, and exporting them as FBX files. It provides both a manual step-by-step process and a fully automated one-click pipeline.
 
 ## Features
 
@@ -85,3 +85,25 @@ There are two main automation operators:
     * It will scan the entire current scene for any `_bone` empties, create rigs, bake them, and export them.
 
 Both automation pipelines will export the final files to a sub-folder located in the **same directory as your saved `.blend` file**. After the process is finished, the export folder will open automatically.
+
+## Credits
+
+**Author:** Oisín O'Sullivan  
+**Version:** 1.0.0  
+**Category:** Animation
+**Original Empties to Bones Script:** Artell - https://github.com/artellblender/empties_to_bones/tree/master
+
+Developed for the SafeMotion project to apply skeletal meshes to animated empties when exported from Motive without the setting enabled.
+
+---
+
+## License
+
+Feel free to use, modify, and distribute this addon for your projects. Attribution appreciated but not required.
+
+---
+
+## Support
+
+Found a bug or have a feature request? Open an issue on this repository!
+
