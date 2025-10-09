@@ -81,8 +81,8 @@ That's it! The addon will:
 
 **What This Fixes:**
 - Prevents "exploded" meshes when applying scale to rigged characters
-- Ensures proper scale values (`1, 1, 1`) for clean game engine exports
-- Eliminates the Unreal Engine "scaled root bone" import issue
+- Ensures proper scale values (`1, 1, 1`) for clean game engine/DCC exports
+- Prevents the Unreal Engine "scaled root bone" import issue
 - Makes retargeting actually work by having uniform scale
 
 ---
