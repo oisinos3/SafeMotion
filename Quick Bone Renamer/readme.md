@@ -7,7 +7,7 @@ A simple Blender addon for quickly renaming bones by transferring names between 
 
 ---
 
-## ## Features
+ ## Features
 
 * **One-Click Renaming**: Transfer a bone name from a source to a target with a single click.
 * **Designated Source Armature**: Set a specific armature as the "source" to avoid ambiguity, regardless of selection order.
@@ -18,7 +18,7 @@ A simple Blender addon for quickly renaming bones by transferring names between 
 
 ---
 
-## ## Installation
+## Installation
 
 1.  Download the `quick_bone_renamer.py` script from this repository.
 2.  In Blender, go to **Edit > Preferences > Add-ons**.
@@ -27,12 +27,12 @@ A simple Blender addon for quickly renaming bones by transferring names between 
 
 ---
 
-## ## How to Use
+## How to Use
 
 The addon will appear in the **3D Viewport's Sidebar** (press the `N` key to show it) under the **"Quick Bone Renamer"** tab.
 
 
-### ### Workflow
+### Workflow
 
 1.  **Disable "Lock Object Mode"**. In order to select bones from multiple skeletons, disable Lock Object Mode in the edit panel, then select each armature.
 2.  **Enter Pose Mode on Each Armature**. The tool only works in this mode.
@@ -43,7 +43,7 @@ The addon will appear in the **3D Viewport's Sidebar** (press the `N` key to sho
     * **Shift-select** any bone on your **target** armature (the one you want to rename).
 6.  **Rename**: Click the **"Quick Rename (Copy & Apply)"** button. The target bone will be instantly renamed to match the source bone's name (minus the prefix).
 
-### ### Manual Mode
+### Manual Mode
 
 If you need to edit a name before applying it, you can use the collapsed **"Manual Two-Step Process"** panel:
 1.  Follow steps 1-4 above.
