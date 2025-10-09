@@ -91,7 +91,6 @@ Both automation pipelines will export the final files to a sub-folder located in
 **Author:** Oisín O'Sullivan  
 **Version:** 1.0.0  
 **Category:** Animation
-
 **Original Empties to Bones Script:** Artell - https://github.com/artellblender/empties_to_bones/tree/master
 
 Developed for the SafeMotion project to apply skeletal meshes to animated empties when exported from Motive without the setting enabled.
