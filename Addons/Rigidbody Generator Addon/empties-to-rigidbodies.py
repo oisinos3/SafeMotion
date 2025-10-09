@@ -1,6 +1,6 @@
 # blender_addon_header
 bl_info = {
-    "name": "OptiTrack: Rigidbody Tools",
+    "name": "Rigidbody Tools",
     "author": "Oisin OSullivan",
     "version": (1, 0, 1), # Final UI label consistency pass
     "blender": (4, 5, 0),
@@ -986,7 +986,7 @@ class OBJECT_OT_run_post_import_pipeline(bpy.types.Operator):
 class VIEW3D_PT_optitrack_importer_panel(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = "OptiTrack"
+    bl_category = "Rigidbody Tools"
     bl_label = "Importer"
     bl_order = 0
     def draw(self, context):
@@ -998,7 +998,7 @@ class VIEW3D_PT_optitrack_importer_panel(bpy.types.Panel):
 class VIEW3D_PT_optitrack_rigidbody_panel(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = "OptiTrack"
+    bl_category = "Rigidbody Tools"
     bl_label = "Rigidbody Tools"
     bl_order = 1
     def draw(self, context):
@@ -1043,7 +1043,7 @@ class VIEW3D_PT_optitrack_rigidbody_panel(bpy.types.Panel):
 class VIEW3D_PT_optitrack_automation_panel(bpy.types.Panel):
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = "OptiTrack"
+    bl_category = "Rigidbody Tools"
     bl_label = "Automation"
     bl_order = 2
     def draw(self, context):
