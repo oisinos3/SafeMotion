@@ -1,9 +1,9 @@
 bl_info = {
     "name": "Quick Bone Renamer",
-    "author": "Oisin O'Sullivan",
+    "author": "Oisín O'Sullivan",
     "version": (1, 0, 0),
     "blender": (4, 0, 0),
-    "location": "View3D > Sidebar > Quick Tools",
+    "location": "View3D > Sidebar > Quick Bone Renamer",
     "description": "Quickly rename bones by transferring names between two separate armatures.",
     "category": "Animation",
 }
@@ -135,7 +135,7 @@ class BONE_PT_smart_renamer_panel(bpy.types.Panel):
     bl_idname = "BONE_PT_smart_renamer"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'Quick Tools'
+    bl_category = 'Quick Bone Renamer'
 
     def draw(self, context):
         layout = self.layout
@@ -174,7 +174,7 @@ class BONE_PT_manual_renamer_panel(bpy.types.Panel):
     bl_idname = "BONE_PT_manual_renamer"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
-    bl_category = 'Quick Tools'
+    bl_category = 'Quick Bone Renamer'
     bl_parent_id = "BONE_PT_smart_renamer"
     bl_options = {'DEFAULT_CLOSED'}
 
