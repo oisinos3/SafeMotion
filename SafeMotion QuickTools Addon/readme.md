@@ -97,7 +97,7 @@ That's it! The addon will:
 
 ## Requirements
 
-- Blender 4.5 or higher
+- Blender 4.5 or higher (Untested on previous versions, though I expect it would work)
 - Works in both single and multiple armature workflows
 
 ---
