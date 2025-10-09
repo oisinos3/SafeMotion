@@ -2,6 +2,8 @@
 
 A comprehensive Blender addon providing basic rigging and animation utilities. Originally developed for working with anatomical skeletons and Optitrack motion capture data, I expanded the scripts I used into re-usable addons for anyone that needs them in future.
 
+Since I built this from separate scripts for different uses - I have the original scripts and readme's in their folders here.
+
 ## Features
 
 ### Quick Bone Renamer
