@@ -1,9 +1,9 @@
 bl_info = {
-    "name": "Motive FBX Retargeting Setup",
+    "name": "Motive Scene Setup",
     "author": "Oisín O'Sullivan",
     "version": (1, 0, 0),
     "blender": (4, 1, 0),
-    "location": "3D View > Sidebar (N Panel) > Motive Pipeline",
+    "location": "3D View > Sidebar (N Panel) > Motive Scene Setup",
     "description": "Tools to prep your scene for retargeting your Motive FBX file onto another armature.",
     "warning": "",
     "doc_url": "",
@@ -129,8 +129,8 @@ class PIPELINE_OT_prepare_retargeting(bpy.types.Operator):
 
 # --- UI PANEL ---
 class VIEW3D_PT_motive_pipeline(bpy.types.Panel):
-    bl_label="Motive to Unreal"; bl_idname="VIEW3D_PT_motive_pipeline"
-    bl_space_type='VIEW_3D'; bl_region_type='UI'; bl_category='Motive Pipeline'
+    bl_label="Motive Scene Setup"; bl_idname="VIEW3D_PT_motive_pipeline"
+    bl_space_type='VIEW_3D'; bl_region_type='UI'; bl_category='Motive Scene Setup'
     def draw(self, context):
         layout = self.layout; scenes = bpy.data.scenes
         required = {"1. Motive Skeleton", "2. Unreal_Manny", "3. Retargeting"}
