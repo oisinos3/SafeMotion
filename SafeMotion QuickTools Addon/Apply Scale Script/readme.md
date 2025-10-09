@@ -4,6 +4,8 @@
 
 A basic Python script for Blender that allows you to safely apply scale to an armature and its associated objects without breaking parenting, skinning, or vertex weights. I had problems exporting to Unreal without scale applied - the root bone would always be scaled up in Unreal, meaning retargeting wouldn't work. This fixes that issue, and zeroes out all scale transforms.
 
+This version is deprecated - and merged with a button into the Quicktools addon.
+
 ## What It Does
 
 When you scale an armature in Blender, using "Apply Scale" on it can cause broken, exploded models. This script automates the process to prevent these issues.
