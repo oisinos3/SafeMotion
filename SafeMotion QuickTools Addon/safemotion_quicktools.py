@@ -212,7 +212,6 @@ class OBJECT_OT_safe_apply_scale(bpy.types.Operator):
     bl_label = "Safe Apply Scale to Armature and Hierarchy"
     bl_options = {'REGISTER', 'UNDO'}
 
-    # --- MODIFIED ---
     # The button is now only active if the selected object is an Armature in Object Mode.
     @classmethod
     def poll(cls, context):
@@ -220,7 +219,6 @@ class OBJECT_OT_safe_apply_scale(bpy.types.Operator):
         return obj and obj.type == 'ARMATURE' and context.mode == 'OBJECT'
 
     def execute(self, context):
-        # --- MODIFIED ---
         # New logic to automatically find all children.
         
         def get_all_children_recursively(obj, children_list):
@@ -309,7 +307,6 @@ class OBJECT_PT_safe_apply_scale_panel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        # --- MODIFIED ---
         # UI text updated for the new workflow.
         layout.label(text="Select Armature to apply scale to hierarchy:")
         row = layout.row()
