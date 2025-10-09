@@ -5,7 +5,7 @@ A comprehensive Blender addon providing basic rigging and animation utilities. O
 ## Features
 
 ### 🦴 Quick Bone Renamer
-Transfer bone names between armatures with ease - perfect for animation retargeting, cleaning up Mixamo imports, or matching naming conventions across different rigs.
+Transfer bone names between armatures easily - perfect for animation retargeting, cleaning up Mixamo/Rigify imports, or matching naming conventions across different rigs.
 
 - **One-Click Renaming**: Copy and apply bone names between armatures instantly
 - **Designated Source Armature**: Set a specific armature as your source to avoid confusion
