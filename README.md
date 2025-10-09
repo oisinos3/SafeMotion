@@ -8,11 +8,11 @@ The repository is actively maintained and serves as a central hub for all projec
 
 ### Project Time Tracking (144/205 Hours)
 
-Currently at **144 hours** out of **205 hours** total (**70.2%** complete).
+Currently at **144 hours** out of **205 hours** total (**70%** complete).
 
 | Progress Bar | Percentage |
 |:---|:---|
-| ██████████████░░░░░░ | **70.2%** |
+| ██████████████░░░░░░ | **70%** |
 ---
 
 ### ⚙️ Core Components & Documentation
