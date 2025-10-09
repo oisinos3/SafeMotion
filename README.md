@@ -17,8 +17,8 @@ Currently at **144 hours** out of **205 hours** total (**70%** complete).
 
 ### ⚙️ Core Components & Documentation
 
-* **Blender Addon & Documentation**: A custom Blender addon for converting Motive FBX rigidbodies into armatures for use in Unreal Engine.
-  * [Find it here](https://github.com/oisinos3/SafeMotion/tree/main/Rigidbody%20Generator%20Addon)
+* **Blender Addons & Documentation**: Multiple custom Blender tools for working with Motive FBX files - including Empties to Rigidbodies, Scene Prepping for retargeting, and Artmature QuickTools - Documentation included.
+  * [Find it here](https://github.com/oisinos3/SafeMotion/tree/main/Addons)
 
 * **Unreal Engine Setup**: Instructions for importing and setting up the rigid body armatures within Unreal Engine.
   * [Find it here](https://github.com/oisinos3/SafeMotion/blob/main/rigidbody_unreal_import.md)
