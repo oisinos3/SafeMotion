@@ -17,7 +17,7 @@ Transfer bone names between armatures easily - perfect for animation retargeting
 - **Clear UI Guidance**: Contextual warnings and step-by-step instructions
 
 ### Safe Apply Scale
-Apply scale transformations to armatures and their entire hierarchy without breaking skinning, parenting, or vertex weights. Essential for clean exports to game engines like Unreal Engine.
+Apply scale transformations to armatures and their entire hierarchy without breaking skinning, parenting, or vertex weights. Final step for prepping a scaled rig for clean exports to game engines like Unreal Engine.
 
 - **Automatic Hierarchy Detection**: Finds and processes all child objects recursively
 - **Preserves Relationships**: Maintains all parent-child connections and bone parenting
