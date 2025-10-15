@@ -1,7 +1,7 @@
 bl_info = {
     "name": "SafeMotion Quicktools",
     "author": "Oisín O'Sullivan",
-    "version": (1, 0, 1),
+    "version": (1, 0, 0),
     "blender": (4, 0, 0),
     "location": "View3D > Sidebar > SafeMotion Quicktools",
     "description": "A collection of tools for rigging and animation, including a bone renamer and a safe armature scale applicator.",
@@ -44,7 +44,6 @@ class BONE_OT_smart_renamer(bpy.types.Operator):
             return None, None
         
         if source_bone.id_data != source_armature:
-            # Try swapping them if the user selected in reverse order
             source_bone, target_bone = target_bone, source_bone
             
         if source_bone.id_data != source_armature:
@@ -109,15 +108,31 @@ class BONE_OT_smart_renamer(bpy.types.Operator):
             self.report({'INFO'}, f"Copied '{cleaned_name}' to text box.")
 
         elif self.action == 'APPLY':
-            target_bone = context.active_pose_bone
-            if not target_bone:
-                self.report({'WARNING'}, "No active target bone selected.")
+            # --- START OF CHANGED LOGIC ---
+            target_bone = None
+            source_armature = context.scene.smart_renamer_source_armature
+            
+            if not context.selected_pose_bones:
+                self.report({'WARNING'}, "No bone selected to apply name to.")
                 return {'CANCELLED'}
             
-            stored_source_name = context.scene.smart_renamer_source_armature_name
-            if stored_source_name and target_bone.id_data.name == stored_source_name:
-                self.report({'WARNING'}, "Cannot apply to a bone on the source armature.")
+            if not source_armature:
+                # Use the stored name as a fallback if the pointer is cleared
+                stored_source_name = context.scene.smart_renamer_source_armature_name
+                if not stored_source_name:
+                    self.report({'WARNING'}, "Cannot determine target: Source Armature is not set.")
+                    return {'CANCELLED'}
+                
+                # Find the target by looking for a bone whose armature does NOT match the stored name
+                target_bone = next((b for b in context.selected_pose_bones if b.id_data.name != stored_source_name), None)
+            else:
+                # Preferred method: Find the target by looking for a bone not on the source armature object
+                target_bone = next((b for b in context.selected_pose_bones if b.id_data != source_armature), None)
+
+            if not target_bone:
+                self.report({'WARNING'}, "Could not find a target bone. Ensure a bone from the target armature is selected.")
                 return {'CANCELLED'}
+            # --- END OF CHANGED LOGIC ---
 
             original_name = target_bone.bone.name
             new_name = context.scene.smart_renamer_new_name
@@ -199,7 +214,7 @@ class BONE_PT_manual_renamer_panel(bpy.types.Panel):
         row = layout.row()
         apply_op = row.operator(BONE_OT_smart_renamer.bl_idname, text="Apply Name")
         apply_op.action = 'APPLY'
-        if not context.active_pose_bone or not context.scene.smart_renamer_new_name:
+        if not context.selected_pose_bones or not context.scene.smart_renamer_new_name:
             row.enabled = False
 
 #===============================================================
@@ -212,14 +227,12 @@ class OBJECT_OT_safe_apply_scale(bpy.types.Operator):
     bl_label = "Safe Apply Scale to Armature and Hierarchy"
     bl_options = {'REGISTER', 'UNDO'}
 
-    # The button is now only active if the selected object is an Armature in Object Mode.
     @classmethod
     def poll(cls, context):
         obj = context.active_object
         return obj and obj.type == 'ARMATURE' and context.mode == 'OBJECT'
 
     def execute(self, context):
-        # New logic to automatically find all children.
         
         def get_all_children_recursively(obj, children_list):
             """Helper function to find all descendants of a given object."""
@@ -234,11 +247,9 @@ class OBJECT_OT_safe_apply_scale(bpy.types.Operator):
             self.report({'ERROR'}, "No active armature selected.")
             return {'CANCELLED'}
 
-        # Build the list of objects to process: the armature and all its descendants.
         original_selection = [armature]
         get_all_children_recursively(armature, original_selection)
 
-        # 1. Store Parent-Child Relationships
         relationships = []
         children_to_unparent = []
         
@@ -247,10 +258,9 @@ class OBJECT_OT_safe_apply_scale(bpy.types.Operator):
                 parent_info = { "child": obj, "parent": obj.parent, "type": obj.parent_type,
                                 "bone_name": obj.parent_bone if obj.parent_type == 'BONE' else None }
                 relationships.append(parent_info)
-                if obj != armature: # Don't unparent the main armature from its potential parent
+                if obj != armature:
                     children_to_unparent.append(obj)
                 
-        # 2. Unparent All Children Safely
         if children_to_unparent:
             bpy.ops.object.select_all(action='DESELECT')
             for child in children_to_unparent:
@@ -258,14 +268,12 @@ class OBJECT_OT_safe_apply_scale(bpy.types.Operator):
             if context.selected_objects:
                 bpy.ops.object.parent_clear(type='CLEAR_KEEP_TRANSFORM')
 
-        # 3. Apply Scale to All Found Objects
         bpy.ops.object.select_all(action='DESELECT')
         for obj in original_selection:
             obj.select_set(True)
         
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
 
-        # 4. Re-parent Everything
         if relationships:
             for rel in relationships:
                 child = rel["child"]
@@ -290,7 +298,6 @@ class OBJECT_OT_safe_apply_scale(bpy.types.Operator):
                 elif rel["type"] == 'OBJECT':
                     bpy.ops.object.parent_set(type='OBJECT', keep_transform=True)
 
-        # Restore original active object selection
         bpy.ops.object.select_all(action='DESELECT')
         context.view_layer.objects.active = armature
         armature.select_set(True)
@@ -307,7 +314,6 @@ class OBJECT_PT_safe_apply_scale_panel(bpy.types.Panel):
 
     def draw(self, context):
         layout = self.layout
-        # UI text updated for the new workflow.
         layout.label(text="Select Armature to apply scale to hierarchy:")
         row = layout.row()
         row.scale_y = 1.5
@@ -322,7 +328,6 @@ class OBJECT_PT_safe_apply_scale_panel(bpy.types.Panel):
 # REGION: REGISTRATION
 #===============================================================
 
-# Combine all classes for registration
 classes = [
     BONE_OT_smart_renamer,
     BONE_PT_smart_renamer_panel,
@@ -332,11 +337,9 @@ classes = [
 ]
 
 def register():
-    # Register all classes
     for cls in classes:
         bpy.utils.register_class(cls)
         
-    # Register properties for the Bone Renamer
     bpy.types.Scene.smart_renamer_new_name = bpy.props.StringProperty(name="New Bone Name")
     bpy.types.Scene.smart_renamer_source_armature_name = bpy.props.StringProperty(name="Source Armature Name")
     bpy.types.Scene.smart_renamer_prefix = bpy.props.StringProperty(name="Prefix to Remove", default="mixamorig:")
@@ -348,18 +351,15 @@ def register():
     )
 
 def unregister():
-    # Unregister all classes in reverse order
     for cls in reversed(classes):
         bpy.utils.unregister_class(cls)
         
-    # Delete properties for the Bone Renamer
     del bpy.types.Scene.smart_renamer_new_name
     del bpy.types.Scene.smart_renamer_source_armature_name
     del bpy.types.Scene.smart_renamer_prefix
     del bpy.types.Scene.smart_renamer_source_armature
 
 if __name__ == "__main__":
-    # Unregister previous versions if necessary before registering
     try:
         unregister()
     except Exception:
