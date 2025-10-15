@@ -1,7 +1,7 @@
 # blender_addon_header
 bl_info = {
     "name": "Rigidbody Tools",
-    "author": "Oisín OSullivan",
+    "author": "Oisín O'Sullivan",
     "version": (1, 0, 0),
     "blender": (4, 5, 0),
     "location": "3D View > Sidebar (N) > OptiTrack",
