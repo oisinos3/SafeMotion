@@ -1,6 +1,6 @@
 # Blender Addons for Motion Capture Workflows
 
-A collection of Blender addons created to manage specific motion capture and animation workflows. These tools were developed for the SafeMotion project to streamline the process of working with OptiTrack Motive data and retargeting animations to character rigs in Unreal Engine.
+This folder stores different Blender addons I created to manage specific workflows. After initially creating and using them as basic scripts, I updated them to be reusable addons for this project and future work.
 
 This package includes three addons:
 - **Motive Scene Setup for Blender** - Automated scene organization and retargeting preparation
