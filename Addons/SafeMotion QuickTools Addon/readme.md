@@ -135,7 +135,7 @@ That's it! The addon will:
 **Version:** 1.0.0  
 **Category:** Animation
 
-Developed for the SafeMotion project to streamline rigging workflows with anatomical skeleton models and retargeted animations.
+Developed for the SafeMotion project.
 
 ---
 
