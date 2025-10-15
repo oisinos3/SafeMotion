@@ -1,18 +1,17 @@
----
-
 # SafeMotion Project
 
 This is the project repository for all documentation, assets, information, and tutorials on the **SafeMotion project**. The project utilizes **OptiTrack motion capture** to help visualize safety procedures and the effects of unsafe manual handling.
 
 The repository is actively maintained and serves as a central hub for all project resources.
 
-### Project Time Tracking (144/205 Hours)
+### Project Time Tracking (149/205 Hours)
 
-Currently at **144 hours** out of **205 hours** total (**70%** complete).
+Currently at **149 hours** out of **205 hours** total (**72.7%** complete).
 
 | Progress Bar | Percentage |
 |:---|:---|
-| ██████████████░░░░░░ | **70%** |
+| ██████████████░░░░░░ | **72.7%** |
+
 ---
 
 ### ⚙️ Core Components & Documentation
