@@ -191,6 +191,7 @@ Consider pairing this with the **SafeMotion Quicktools** addon for bone renaming
 **Author:** Oisín O'Sullivan  
 **Version:** 1.0.0  
 **Category:** Animation
+
 **UE5-Manny:** Epic Games and cjlima - https://github.com/cjmlima/UE5-Blender-Rig
 
 Developed for the SafeMotion project to streamline Optitrack Motive to Unreal Engine mocap pipelines.
