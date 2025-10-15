@@ -1,8 +1,8 @@
 # blender_addon_header
 bl_info = {
     "name": "Rigidbody Tools",
-    "author": "Oisin OSullivan",
-    "version": (1, 0, 1), # Final UI label consistency pass
+    "author": "Oisín OSullivan",
+    "version": (1, 0, 0),
     "blender": (4, 5, 0),
     "location": "3D View > Sidebar (N) > OptiTrack",
     "description": "A tool to import, create, bake, and export rigs from animated OptiTrack empties. Heavily expanded version of Artell's *Empties to Bones* script. Now includes a one-click pipeline.",
