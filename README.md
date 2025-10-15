@@ -1,23 +1,22 @@
----
-
 # SafeMotion Project
 
 This is the project repository for all documentation, assets, information, and tutorials on the **SafeMotion project**. The project utilizes **OptiTrack motion capture** to help visualize safety procedures and the effects of unsafe manual handling.
 
 The repository is actively maintained and serves as a central hub for all project resources.
 
-### Project Time Tracking (144/205 Hours)
+### Project Time Tracking (152/205 Hours)
 
-Currently at **144 hours** out of **205 hours** total (**70%** complete).
+Currently at **152 hours** out of **205 hours** total (**74%** complete).
 
 | Progress Bar | Percentage |
-|:---|:---|
-| ██████████████░░░░░░ | **70%** |
+| :--- | :--- |
+| ███████████████░░░░░ | **74%** |
+
 ---
 
 ### ⚙️ Core Components & Documentation
 
-* **Blender Addons & Documentation**: Multiple custom Blender tools for working with Motive FBX files - including Empties to Rigidbodies, Scene Prepping for retargeting, and Artmature QuickTools - Documentation included.
+* **Blender Addons & Documentation**: Multiple custom Blender tools for working with Motive FBX files - including Empties to Rigidbodies, Scene Prepping for retargeting, and Armature QuickTools - Documentation included.
   * [Find it here](https://github.com/oisinos3/SafeMotion/tree/main/Addons)
 
 * **Unreal Engine Setup**: Instructions for importing and setting up the rigid body armatures within Unreal Engine.
