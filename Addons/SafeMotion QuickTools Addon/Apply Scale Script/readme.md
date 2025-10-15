@@ -17,7 +17,7 @@ It safely applies the scale transformations to a selected armature and its meshe
 1.  **Open the Scripting Workspace:** In Blender, navigate to the `Scripting` tab.
 2.  **Create a New Script:** Click the `+ New` button to create a new text file.
 3.  **Paste the Code:** Copy the entire `safe_apply_scale.py` script and paste it into the text editor.
-4.  **Select Your Objects:** In the 3D Viewport, **select the armature and all of its child mesh objects** that you want to affect.
+4.  **Select Your Objects:** In the 3D Viewport, **select the armature** that you want to affect.
 5.  **Run the Script:** Click the "Run Script" button (play icon) at the top of the text editor.
 
 The script will then run. You can check the system console for progress messages.
