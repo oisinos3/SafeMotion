@@ -4,13 +4,13 @@ This is the project repository for all documentation, assets, information, and t
 
 The repository is actively maintained and serves as a central hub for all project resources.
 
-### Project Time Tracking (155/205 Hours)
+### Project Time Tracking (162/205 Hours)
 
-Currently at **155 hours** out of **205 hours** total (**76%** complete).
+Currently at **162 hours** out of **205 hours** total (**79%** complete).
 
 | Progress Bar | Percentage |
 | :--- | :--- |
-| ███████████████░░░░░ | **76%** |
+| ███████████████░░░░░ | **79%** |
 
 ---
 
