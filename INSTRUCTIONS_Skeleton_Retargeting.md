@@ -12,7 +12,7 @@ The following fields in the OP Stack are blank and require you to input the bone
 
 <img width="686" height="276" alt="image" src="https://github.com/user-attachments/assets/5b53fb77-a989-4ece-838e-2cc94f0d334e" />
 
-2. In the OP Stack - in "Copy Base Pose" - type out the name of the Root bone into the box - it must be exact, as it's not a selector tool.
+2. In the OP Stack - in "Copy Base Pose" - type out the name of the Root bone into the box - it must be exact, and is case sensitive.
 
 <img width="437" height="93" alt="image" src="https://github.com/user-attachments/assets/c735ff32-5f0d-4bc4-a28a-fb581d164be6" />
 
