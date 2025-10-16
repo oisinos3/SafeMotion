@@ -7,7 +7,6 @@ This folder stores all of the motion capture takes, categorized by type. The rig
 ## ✅ Good Takes
 
 * **Normal\_Lift**
-    * **Notes:** -
 * **Good\_Lift**
     * **Notes:** -
 
@@ -16,11 +15,8 @@ This folder stores all of the motion capture takes, categorized by type. The rig
 ## ❌ Bad Takes
 
 * **Bad\_Lift**
-    * **Notes:** -
 * **Area\_Limits\_Test**
-    * **Notes:** -
 * **Bad\_Lift\_Box (no trolley rigidbody)**
-    * **Notes:** -
 * **Bad\_Lift\_2**
     * **Notes:** -
 
@@ -29,32 +25,29 @@ This folder stores all of the motion capture takes, categorized by type. The rig
 ## 🤝 Interactive Takes
 
 * **Box\_Handoff\_1**
-    * **Notes:** -
 * **Box\_Handoff\_2**
-    * **Notes:** -
+    * **Notes:** - Only has human skeletons - no rigidbody empties or meshes.
 
 ---
 
 ## ⚙️ Rigidbody Only Takes
 
 * **Rigidbodies\_Only\_incTrolley**
-    * **Notes:** -
 * **Rigidbodies\_Only\_noTrolley**
-    * **Notes:** -
+    * **Notes:** - Only has rigidbody empties - no human skeleton mocap data.
 
 ---
 
 ## 🥋 Sparring Takes
 
 * **Long\_Sparring\_Session**
-    * **Notes:** -
 * **Short\_Sparring\_Session**
-    * **Notes:** -
+    * **Notes:** - Some Slow motion sparring data.
 
 ---
 
 ## 🤸 General & Test Takes
 
 * **Walkaround\_Test**
-    * **Description:** Contains a variety of general movements including walking, stretching, and jumping.
-    * **Notes:** -
+* **Dummy Take**
+    * **Notes:** - Contains a variety of general movements including walking, stretching, and jumping.
