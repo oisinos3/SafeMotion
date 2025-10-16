@@ -1,6 +1,6 @@
 # Motion Capture Take Library
 
-This document provides an overview of the motion capture takes, categorized by type.
+This folder stores all of the motion capture takes, categorized by type. The rigidbody empties **must be processed through the Blender addon** before being imported into Unreal.
 
 ---
 
