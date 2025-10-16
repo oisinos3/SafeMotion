@@ -4,7 +4,7 @@ bl_info = {
     "author": "Oisín O'Sullivan",
     "version": (1, 0, 0),
     "blender": (4, 5, 0),
-    "location": "3D View > Sidebar (N) > OptiTrack",
+    "location": "3D View > Sidebar (N) > Rigidbody Tools",
     "description": "A tool to import, create, bake, and export rigs from animated OptiTrack empties. Heavily expanded version of Artell's *Empties to Bones* script. Now includes a one-click pipeline.",
     "warning": "",
     "doc_url": "",
