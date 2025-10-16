@@ -1,7 +1,5 @@
 ### File Contents
 
-The files in this folder are the most recent takes recorded, and are named to reflect their contents and required processing steps.
-
 ---
 
 * **`RigidBodies_Only` files:** These files contain only rigid bodies with no human skeletons or skeletal meshes. They **must be processed through the Blender addon** to be read by Unreal, as they lack a skeletal mesh or armature.
