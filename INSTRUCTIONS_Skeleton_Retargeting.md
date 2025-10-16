@@ -12,6 +12,8 @@ The following fields in the OP Stack are blank and require you to input the bone
 
 2. In the OP Stack - in "Copy Base Pose" - type out the name of the Root bone into the box - it must be exact, as it's not a selector tool.
 
+<img width="437" height="93" alt="image" src="https://github.com/user-attachments/assets/c735ff32-5f0d-4bc4-a28a-fb581d164be6" />
+
 3. In the OP Stack - in "Pelvis Motion" - select the source Pelvis bone.
 
 <img width="497" height="96" alt="image" src="https://github.com/user-attachments/assets/4b1b6a1a-ee87-4e72-b494-48d96e8551e5" />
