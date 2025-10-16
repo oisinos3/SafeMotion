@@ -16,9 +16,9 @@ This folder stores all of the motion capture takes, categorized by type. The rig
 
 * **Bad\_Lift**
 * **Area\_Limits\_Test**
-* **Bad\_Lift\_Box (no trolley rigidbody)**
+* **Bad\_Lift\_Box**
 * **Bad\_Lift\_2**
-    * **Notes:** -
+    * **Notes:** - In Bad_Lift_Box - the box has a rigidbody empty, whereas the trolley does not.
 
 ---
 
